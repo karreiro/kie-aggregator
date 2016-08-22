@@ -16,12 +16,32 @@
 
 package org.kie;
 
-/**
- * Hello world!
- */
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.google.gson.Gson;
+import com.sun.syndication.feed.synd.SyndEntry;
+import org.json.simple.JSONObject;
+import org.kie.io.EntriesRecorder;
+import org.kie.io.Entry;
+import org.kie.rss.RSSClient;
+
 public class App {
 
     public static void main( String[] args ) {
-        System.out.println( "Hello World!" );
+        final String feedUrl = "http://tecnologia.uol.com.br/ultnot/index.xml";
+        final String destinationPath = "/home/karreiro/entries.js";
+
+        final RSSClient rssClient = new RSSClient( feedUrl );
+        final EntriesRecorder recorder = new EntriesRecorder( destinationPath );
+
+        List<Entry> entries = ( (List<SyndEntry>) rssClient.getEntries() )
+                .stream()
+                .map( Entry::new )
+                .filter( entry -> entry.getTitle().contains( "Drools" ) )
+                .collect( Collectors.toList() );
+
+        recorder.record( new Gson().toJson( entries ) );
     }
 }
