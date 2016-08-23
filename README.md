@@ -7,10 +7,4 @@ It supports:
 - [x] RSS posts
 - [ ] Google Plus posts
 
-## See it in action!
-
-#### Demo 1
-![Sample](https://raw.githubusercontent.com/karreiro/kie-aggregator/master/assets/sample-1.gif)
-
-#### Demo 2
-![Sample](https://raw.githubusercontent.com/karreiro/kie-aggregator/master/assets/sample-2.gif)
+See it in action: [demo 1](https://raw.githubusercontent.com/karreiro/kie-aggregator/master/assets/sample-1.gif) and [demo 2](https://raw.githubusercontent.com/karreiro/kie-aggregator/master/assets/sample-2.gif).
