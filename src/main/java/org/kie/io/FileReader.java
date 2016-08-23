@@ -21,8 +21,8 @@ import java.util.List;
 public class FileReader {
     private final String filePath;
 
-    public FileReader( final String filePath ) {
-        this.filePath = filePath;
+    public FileReader( final String fileName ) {
+        this.filePath = fileName;
     }
 
     public List<Entry> getEntries() {

@@ -14,23 +14,29 @@
  * limitations under the License.
  */
 
-package org.kie.social.twitter;
+package org.kie.twitter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.kie.io.Entry;
+import twitter4j.Paging;
 import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 
 public class TwitterClient {
 
-    public List<Entry> getEntries( final String query ) {
+    private static final int SEARCH_MAX_VALUE = 100;
+    private static final int TIMELINE_MAX_VALUE = 200;
+
+    public List<Entry> getEntriesByHashTag( final String hashTag ) {
         try {
-            return twitterClient()
-                    .search( new Query( query ) )
+            return twitter()
+                    .search( new Query( "#" + hashTag ).count( SEARCH_MAX_VALUE ) )
                     .getTweets()
                     .stream()
                     .map( Entry::new )
@@ -43,7 +49,23 @@ public class TwitterClient {
         return null;
     }
 
-    private Twitter twitterClient() {
+    public List<Entry> getEntriesByUser( final String screenName ) {
+        try {
+            return twitter()
+                    .timelines()
+                    .getUserTimeline( screenName, new Paging().count( TIMELINE_MAX_VALUE ) )
+                    .stream()
+                    .map( Entry::new )
+                    .collect( Collectors.toList() );
+
+        } catch ( TwitterException e ) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    Twitter twitter() {
         return TwitterFactory.getSingleton();
     }
 }

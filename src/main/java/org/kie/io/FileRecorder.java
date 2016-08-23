@@ -24,21 +24,21 @@ import com.google.gson.Gson;
 
 public class FileRecorder {
 
-    private final String filePath;
+    private final String fileName;
 
-    public FileRecorder( final String filePath ) {
-        this.filePath = filePath;
+    public FileRecorder( final String fileName ) {
+        this.fileName = fileName;
     }
 
     public void record( List<Entry> entries ) {
-        final String fileContent = "var entries = " + toJson( entries );
+        final String fileContent = toJson( entries );
 
         writeFile( fileContent );
     }
 
     private void writeFile( final String fileContent ) {
         try {
-            final FileWriter file = new FileWriter( filePath );
+            final FileWriter file = new FileWriter( filePath() + fileName + ".json" );
 
             file.write( fileContent );
             file.flush();
@@ -50,5 +50,9 @@ public class FileRecorder {
 
     private String toJson( final List<Entry> entries ) {
         return new Gson().toJson( entries );
+    }
+
+    private String filePath() {
+        return System.getProperty("user.dir") + "/static-content/";
     }
 }

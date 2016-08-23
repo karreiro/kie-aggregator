@@ -16,6 +16,8 @@
 
 package org.kie.io;
 
+import java.util.Date;
+
 import com.sun.syndication.feed.synd.SyndEntry;
 import twitter4j.Status;
 
@@ -24,16 +26,19 @@ public class Entry {
     private final String title;
     private final String link;
     private final EntryType type;
+    private final Date date;
 
     public Entry( SyndEntry entry ) {
         title = entry.getTitle().trim();
         link = entry.getLink().trim();
+        date = entry.getPublishedDate();
         type = EntryType.RSS;
     }
 
     public Entry( final Status status ) {
-        this.title = "@" + status.getUser().getScreenName() + ":" + status.getText();
-        this.link = status.getURLEntities()[0].getURL();
+        this.title = "@" + status.getUser().getScreenName() + ": " + status.getText();
+        this.link = "https://twitter.com/" + status.getUser().getScreenName() + "/status/" + status.getId();
+        this.date = status.getCreatedAt();
         this.type = EntryType.TWITTER;
     }
 
@@ -43,5 +48,13 @@ public class Entry {
 
     public String getLink() {
         return link;
+    }
+
+    public EntryType getType() {
+        return type;
+    }
+
+    public Date getDate() {
+        return date;
     }
 }

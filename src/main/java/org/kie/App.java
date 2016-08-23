@@ -16,9 +16,25 @@
 
 package org.kie;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class App {
 
     public static void main( String[] args ) {
-        // empty
+
+        List<String> keywords = new ArrayList<String>( ) {{
+            add("Drools");
+            add("jBPM");
+            add("KIE");
+            add( "JBoss" );
+        }};
+
+        Importer.runRssImporter( "RedHat", "https://www.redhat.com/en/rss/press-releases", keywords );
+
+        Importer.runTwitterUserImporter( "GuilhermeCarreiro", "g_carreiro", keywords );
+        Importer.runTwitterUserImporter( "MarkProctor", "markproctor", keywords );
+
+        keywords.forEach( Importer::runTwitterHashTagImporter );
     }
 }

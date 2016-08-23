@@ -1,5 +1,6 @@
 /target
 /local
+/static-content/*.json
 
 # Eclipse, Netbeans and IntelliJ files
 /.*

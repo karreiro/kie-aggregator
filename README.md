@@ -6,7 +6,11 @@ It supports:
 - [x] Tweets
 - [x] RSS posts
 - [ ] Google Plus posts
-- [ ] Facebook posts
 
 ## See it in action!
-![Sample](https://raw.githubusercontent.com/karreiro/kie-aggregator/master/assets/sample.gif)
+
+#### Demo 1
+![Sample](https://raw.githubusercontent.com/karreiro/kie-aggregator/master/assets/sample-1.gif)
+
+#### Demo 2
+![Sample](https://raw.githubusercontent.com/karreiro/kie-aggregator/master/assets/sample-2.gif)

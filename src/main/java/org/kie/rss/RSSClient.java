@@ -17,23 +17,18 @@
 package org.kie.rss;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
-import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
+import org.kie.io.Entry;
 
 public class RSSClient {
-
-    public static final int N_THREADS = 1;
 
     private final String feedUrl;
 
@@ -41,42 +36,30 @@ public class RSSClient {
         this.feedUrl = feedUrl;
     }
 
-    public List getEntries() {
-        InputStream inputStream = getInputStream();
+    public List<Entry> getEntries() {
         try {
-            XmlReader xmlReader = new XmlReader( inputStream );
+            return getFeedEntries()
+                    .stream()
+                    .map( Entry::new )
+                    .collect( Collectors.toList() );
 
-            SyndFeedInput input = new SyndFeedInput();
-            SyndFeed feed = input.build( xmlReader );
-
-            return feed.getEntries();
-        } catch ( IOException | FeedException e ) {
+        } catch ( FeedException | IOException e ) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private InputStream getInputStream() {
-        ExecutorService executor = getExecutor();
+    protected List<SyndEntry> getFeedEntries() throws FeedException, IOException {
+        final SyndFeedInput input = new SyndFeedInput();
 
-        try {
-            Future<Response> response = executor.submit( request() );
-
-            return response.get().getBody();
-        } catch ( InterruptedException | IOException | ExecutionException e ) {
-            e.printStackTrace();
-        } finally {
-            executor.shutdown();
-        }
-
-        return null;
+        return input.build( xmlReader() ).getEntries();
     }
 
-    private Request request() throws MalformedURLException {
-        return new Request( new URL( this.feedUrl ) );
+    private XmlReader xmlReader() throws IOException {
+        return new XmlReader( feedUrl() );
     }
 
-    private ExecutorService getExecutor() {
-        return Executors.newFixedThreadPool( N_THREADS );
+    private URL feedUrl() throws MalformedURLException {
+        return new URL( this.feedUrl );
     }
 }
