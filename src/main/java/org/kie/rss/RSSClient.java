@@ -50,26 +50,20 @@ public class RSSClient {
             SyndFeed feed = input.build( xmlReader );
 
             return feed.getEntries();
-        } catch ( IOException e ) {
-            e.printStackTrace();
-        } catch ( FeedException e ) {
+        } catch ( IOException | FeedException e ) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public InputStream getInputStream() {
+    private InputStream getInputStream() {
         ExecutorService executor = getExecutor();
 
         try {
             Future<Response> response = executor.submit( request() );
 
             return response.get().getBody();
-        } catch ( InterruptedException e ) {
-            e.printStackTrace();
-        } catch ( ExecutionException e ) {
-            e.printStackTrace();
-        } catch ( IOException e ) {
+        } catch ( InterruptedException | IOException | ExecutionException e ) {
             e.printStackTrace();
         } finally {
             executor.shutdown();

@@ -14,11 +14,19 @@
  * limitations under the License.
  */
 
-package org.kie;
+package org.kie.io;
 
-public class App {
+import java.util.List;
 
-    public static void main( String[] args ) {
-        // empty
+public class FileReader {
+    private final String filePath;
+
+    public FileReader( final String filePath ) {
+        this.filePath = filePath;
+    }
+
+    public List<Entry> getEntries() {
+        // TODO
+        return null;
     }
 }

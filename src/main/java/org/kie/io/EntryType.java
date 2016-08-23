@@ -16,29 +16,6 @@
 
 package org.kie.io;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-
-import org.json.simple.JSONObject;
-
-public class EntriesRecorder {
-
-    private final String fileName;
-
-    public EntriesRecorder( final String destinationPath ) {
-        this.fileName = destinationPath;
-    }
-
-    public void record( String s ) {
-//        new JSONObject();
-        try {
-            final FileWriter file = new FileWriter( fileName );
-            file.write( "var entries = " + s );
-            file.flush();
-            file.close();
-        } catch ( IOException e ) {
-            e.printStackTrace();
-        }
-    }
+public enum EntryType {
+    RSS, TWITTER
 }

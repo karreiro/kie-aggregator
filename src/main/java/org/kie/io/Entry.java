@@ -17,15 +17,24 @@
 package org.kie.io;
 
 import com.sun.syndication.feed.synd.SyndEntry;
+import twitter4j.Status;
 
 public class Entry {
 
     private final String title;
     private final String link;
+    private final EntryType type;
 
     public Entry( SyndEntry entry ) {
         title = entry.getTitle().trim();
         link = entry.getLink().trim();
+        type = EntryType.RSS;
+    }
+
+    public Entry( final Status status ) {
+        this.title = "@" + status.getUser().getScreenName() + ":" + status.getText();
+        this.link = status.getURLEntities()[0].getURL();
+        this.type = EntryType.TWITTER;
     }
 
     public String getTitle() {
