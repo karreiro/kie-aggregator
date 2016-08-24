@@ -17,5 +17,5 @@
 package org.kie.io;
 
 public enum EntryType {
-    RSS, TWITTER
+    RSS, GooglePlus, TWITTER
 }

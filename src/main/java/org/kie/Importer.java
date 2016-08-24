@@ -19,6 +19,7 @@ package org.kie;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.kie.gplus.GooglePlusClient;
 import org.kie.io.Entry;
 import org.kie.io.FileRecorder;
 import org.kie.rss.RSSClient;
@@ -41,13 +42,30 @@ public class Importer {
         fileRecorder( hashTag + "-Twitter" ).record( twitter.getEntriesByHashTag( hashTag ) );
     }
 
-    public static void runTwitterUserImporter( String userName,
-                                               String twitterScreenName,
+    public static void runTwitterUserImporter( final String userName,
+                                               final String twitterScreenName,
                                                final List<String> keywords ) {
+
         final TwitterClient twitter = new TwitterClient();
         final List<Entry> entries = filterByKeywords( twitter.getEntriesByUser( twitterScreenName ), keywords );
 
         fileRecorder( userName + "-Twitter" ).record( entries );
+    }
+
+    public static void runGooglePlusSearch( String keyWord ) {
+        final GooglePlusClient googlePlus = new GooglePlusClient();
+
+        fileRecorder( keyWord + "-GooglePlus" ).record( googlePlus.getEntriesByKeyWord( keyWord ) );
+    }
+
+    public static void runGooglePlusUserImporter( final String userName,
+                                                  final String googlePlusUserName,
+                                                  final List<String> keywords ) {
+
+        final GooglePlusClient googlePlus = new GooglePlusClient();
+        final List<Entry> entries = filterByKeywords( googlePlus.getEntriesByUser( googlePlusUserName ), keywords );
+
+        fileRecorder( userName + "-GooglePlus" ).record( entries );
     }
 
     private static FileRecorder fileRecorder( final String userName ) {

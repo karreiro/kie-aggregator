@@ -17,11 +17,10 @@
 package org.kie.rss;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Date;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import org.junit.Test;
-import org.kie.io.Entry;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -35,6 +34,7 @@ public class RSSClientTest {
 
         when( syndEntry.getTitle() ).thenReturn( "" );
         when( syndEntry.getLink() ).thenReturn( "" );
+        when( syndEntry.getPublishedDate() ).thenReturn( new Date() );
         when( rssClient.getFeedEntries() ).thenReturn( Arrays.asList( syndEntry, syndEntry ) );
 
         assertEquals( 2, rssClient.getEntries().size() );

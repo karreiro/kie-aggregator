@@ -18,6 +18,7 @@ package org.kie.io;
 
 import java.util.Date;
 
+import com.google.api.client.util.DateTime;
 import com.sun.syndication.feed.synd.SyndEntry;
 import org.junit.Test;
 import twitter4j.Status;
@@ -41,7 +42,7 @@ public class EntryTest {
 
         assertEquals( "RSS Title", entry.getTitle() );
         assertEquals( "https://www.redhat.com/en/rss/press-releases", entry.getLink() );
-        assertEquals( date, entry.getDate() );
+        assertEquals( new DateTime( date ), entry.getCreatedAt() );
         assertEquals( EntryType.RSS, entry.getType() );
     }
 
@@ -61,7 +62,7 @@ public class EntryTest {
 
         assertEquals( "@g_carreiro: Test", entry.getTitle() );
         assertEquals( "https://twitter.com/g_carreiro/status/1", entry.getLink() );
-        assertEquals( date, entry.getDate() );
+        assertEquals( new DateTime( date ), entry.getCreatedAt() );
         assertEquals( EntryType.TWITTER, entry.getType() );
     }
 }

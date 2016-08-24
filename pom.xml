@@ -88,5 +88,11 @@
       <version>1.10.19</version>
     </dependency>
 
+      <dependency>
+        <groupId>com.google.apis</groupId>
+        <artifactId>google-api-services-plus</artifactId>
+        <version>v1-rev431-1.22.0</version>
+      </dependency>
+
   </dependencies>
 </project>

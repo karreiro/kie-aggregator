@@ -23,10 +23,10 @@ public class App {
 
     public static void main( String[] args ) {
 
-        List<String> keywords = new ArrayList<String>( ) {{
-            add("Drools");
-            add("jBPM");
-            add("KIE");
+        List<String> keywords = new ArrayList<String>() {{
+            add( "Drools" );
+            add( "jBPM" );
+            add( "KIE" );
             add( "JBoss" );
         }};
 
@@ -35,6 +35,10 @@ public class App {
         Importer.runTwitterUserImporter( "GuilhermeCarreiro", "g_carreiro", keywords );
         Importer.runTwitterUserImporter( "MarkProctor", "markproctor", keywords );
 
+        Importer.runGooglePlusUserImporter( "GuilhermeCarreiro", "107736479244951758517", keywords );
+        Importer.runGooglePlusUserImporter( "MarkProctor", "+MarkProctor", keywords );
+
         keywords.forEach( Importer::runTwitterHashTagImporter );
+        keywords.forEach( Importer::runGooglePlusSearch );
     }
 }

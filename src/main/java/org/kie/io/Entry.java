@@ -16,8 +16,8 @@
 
 package org.kie.io;
 
-import java.util.Date;
-
+import com.google.api.client.util.DateTime;
+import com.google.api.services.plus.model.Activity;
 import com.sun.syndication.feed.synd.SyndEntry;
 import twitter4j.Status;
 
@@ -26,20 +26,27 @@ public class Entry {
     private final String title;
     private final String link;
     private final EntryType type;
-    private final Date date;
+    private final DateTime createdAt;
 
     public Entry( SyndEntry entry ) {
         title = entry.getTitle().trim();
         link = entry.getLink().trim();
-        date = entry.getPublishedDate();
+        createdAt = new DateTime( entry.getPublishedDate() );
         type = EntryType.RSS;
     }
 
     public Entry( final Status status ) {
         this.title = "@" + status.getUser().getScreenName() + ": " + status.getText();
         this.link = "https://twitter.com/" + status.getUser().getScreenName() + "/status/" + status.getId();
-        this.date = status.getCreatedAt();
+        this.createdAt = new DateTime( status.getCreatedAt() );
         this.type = EntryType.TWITTER;
+    }
+
+    public Entry( final Activity activity ) {
+        this.title = getTitle( activity );
+        this.link = activity.getUrl();
+        this.createdAt = activity.getPublished();
+        this.type = EntryType.GooglePlus;
     }
 
     public String getTitle() {
@@ -54,7 +61,27 @@ public class Entry {
         return type;
     }
 
-    public Date getDate() {
-        return date;
+    public DateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    private String getTitle( Activity activity ) {
+        if ( activity.getTitle() != null && !activity.getTitle().isEmpty() ) {
+            return removeTags( activity.getTitle() );
+        }
+
+        if ( activity.getAnnotation() != null && !activity.getAnnotation().isEmpty() ) {
+            return removeTags( activity.getAnnotation() );
+        }
+
+        if ( activity.getObject().getContent() != null && !activity.getObject().getContent().isEmpty() ) {
+            return removeTags( activity.getObject().getContent() );
+        }
+
+        return activity.getUrl();
+    }
+
+    private String removeTags( String s ) {
+        return s.replaceAll( "\\<.*?>", "" ).trim();
     }
 }

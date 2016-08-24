@@ -17,6 +17,7 @@
 package org.kie.twitter;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class TwitterClientTest {
         final Query expectedQuery = new Query( "#Drools" ).count( 100 );
         final TwitterClient client = newTwitterClient( twitterSearchMock( expectedQuery ) );
 
-        List<Entry> entries = client.getEntriesByHashTag( "Drools" );
+        final List<Entry> entries = client.getEntriesByHashTag( "Drools" );
 
         assertEquals( 2, entries.size() );
     }
@@ -52,7 +53,7 @@ public class TwitterClientTest {
         final Paging expectedPagination = new Paging().count( 200 );
         final TwitterClient client = newTwitterClient( twitterUserTimeLineMock( expectedSearch, expectedPagination ) );
 
-        List<Entry> entries = client.getEntriesByUser( "g_carreiro" );
+        final List<Entry> entries = client.getEntriesByUser( "g_carreiro" );
 
         assertEquals( 3, entries.size() );
     }
@@ -74,6 +75,7 @@ public class TwitterClientTest {
         final TimelinesResources timelinesResources = mock( TimelinesResources.class );
 
         when( status.getUser() ).thenReturn( mock( User.class ) );
+        when( status.getCreatedAt() ).thenReturn( new Date() );
         when( responseList.stream() ).thenReturn( Arrays.asList( status, status, status ).stream() );
         when( timelinesResources.getUserTimeline( screenName, resultsPerPage ) ).thenReturn( responseList );
         when( twitter.timelines() ).thenReturn( timelinesResources );
@@ -87,6 +89,7 @@ public class TwitterClientTest {
         final Status status = mock( Status.class );
 
         when( status.getUser() ).thenReturn( mock( User.class ) );
+        when( status.getCreatedAt() ).thenReturn( new Date() );
         when( queryResult.getTweets() ).thenReturn( Arrays.asList( status, status ) );
         when( twitter.search( query ) ).thenReturn( queryResult );
 
