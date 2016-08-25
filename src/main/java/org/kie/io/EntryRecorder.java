@@ -17,62 +17,62 @@
 package org.kie.io;
 
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.google.gson.Gson;
-
-public class FileRecorder {
+public class EntryRecorder {
 
     private final String fileName;
 
-    public FileRecorder( final String fileName ) {
+    public EntryRecorder( final String fileName ) {
         this.fileName = fileName;
     }
 
     public void record( List<Entry> newEntries ) {
-        final FileReader fileReader = new FileReader( filePath() );
+        final List<Entry> existingEntries = loadExistingEntries();
+        final List<Entry> entries = merge( newEntries, existingEntries );
 
-        List<Entry> entries = new ArrayList<>();
-
-        try {
-            entries = fileReader.getEntries();
-        } catch ( FileNotFoundException e ) {
-
-        }
-
-        newEntries.addAll( entries );
-
-        final List<Entry> entryList = newEntries
-                .stream()
-                .distinct( )
-                .sorted( ( e1, e2 ) -> e1.compareTo( e1 ) )
-                .collect( Collectors.toList() );
-
-        final String fileContent = toJson( entryList );
-
-        writeFile( fileContent );
+        overrideExistingEntries( entries );
     }
 
-    private void writeFile( final String fileContent ) {
-        try {
-            final FileWriter file = new FileWriter( filePath() );
+    private List<Entry> merge( final List<Entry> newEntries,
+                               final List<Entry> existingEntries ) {
+        final ArrayList<Entry> entries = new ArrayList<Entry>() {{
+            addAll( newEntries );
+            addAll( existingEntries );
+        }};
 
-            file.write( fileContent );
-            file.flush();
-            file.close();
+        return entries
+                .stream()
+                .distinct()
+                .sorted( Entry::compareTo )
+                .collect( Collectors.toList() );
+    }
+
+    List<Entry> loadExistingEntries() {
+        try {
+            return fileReader().getEntries();
+        } catch ( FileNotFoundException e ) {
+            return new ArrayList<>();
+        }
+    }
+
+    void overrideExistingEntries( final List<Entry> entryList ) {
+        try {
+            fileRecorder().record( entryList );
         } catch ( IOException e ) {
             e.printStackTrace();
         }
     }
 
-    private String toJson( final List<Entry> entries ) {
-        return new Gson().toJson( entries );
+    private EntryReader fileReader() {
+        return new EntryReader( filePath() );
+    }
+
+    private EntryWriter fileRecorder() {
+        return new EntryWriter( filePath() );
     }
 
     private String filePath() {

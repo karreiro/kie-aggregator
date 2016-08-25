@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-package org.kie;
+package org.kie.config;
 
+import java.util.Arrays;
 import java.util.List;
 
-import org.kie.config.KeyWords;
-import org.kie.config.People;
+import static org.kie.config.ConfigHelper.*;
 
-public class App {
+public class KeyWords {
 
-    public static void main( String[] args ) {
-        final List<String> keywords = KeyWords.all();
-
-        People.all().forEach( person -> {
-            Importer.runTwitterUserImporter( person.getUserId(), person.getTwitter() );
-            Importer.runGooglePlusUserImporter( person.getUserId(), person.getGooglePlus() );
-            Importer.runRssImporter( person.getUserId(), person.getRss() );
-        } );
-
-        keywords.forEach( Importer::runTwitterHashTagImporter );
-        keywords.forEach( Importer::runGooglePlusSearch );
+    public static List<String> all() {
+        return Arrays.asList( gson().fromJson( readFile( "keywords.json" ), String[].class ) );
     }
 }

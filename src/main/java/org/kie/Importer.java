@@ -19,62 +19,59 @@ package org.kie;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.kie.config.KeyWords;
 import org.kie.gplus.GooglePlusClient;
 import org.kie.io.Entry;
-import org.kie.io.FileRecorder;
+import org.kie.io.EntryRecorder;
 import org.kie.rss.RSSClient;
 import org.kie.twitter.TwitterClient;
 
 public class Importer {
 
-    public static void runRssImporter( String userName,
-                                       String feedUrl,
-                                       final List<String> keywords ) {
-        final RSSClient rss = new RSSClient( feedUrl );
-        final List<Entry> entries = filterByKeywords( rss.getEntries(), keywords );
+    private static List<String> keywords = KeyWords.all();
 
-        fileRecorder( userName + "-RSS" ).record( entries );
+    public static void runRssImporter( final String userName,
+                                       final String feedUrl ) {
+        final List<Entry> entries = filterByKeywords( new RSSClient( feedUrl ).getEntries() );
+
+        record( userName + "-RSS", entries );
     }
 
-    public static void runTwitterHashTagImporter( String hashTag ) {
-        final TwitterClient twitter = new TwitterClient();
+    public static void runTwitterHashTagImporter( final String hashTag ) {
+        final List<Entry> entries = new TwitterClient().getEntriesByHashTag( hashTag );
 
-        fileRecorder( hashTag + "-Twitter" ).record( twitter.getEntriesByHashTag( hashTag ) );
+        record( hashTag + "-Twitter", entries );
     }
 
     public static void runTwitterUserImporter( final String userName,
-                                               final String twitterScreenName,
-                                               final List<String> keywords ) {
+                                               final String twitterScreenName ) {
+        final List<Entry> entries = filterByKeywords( new TwitterClient().getEntriesByUser( twitterScreenName ) );
 
-        final TwitterClient twitter = new TwitterClient();
-        final List<Entry> entries = filterByKeywords( twitter.getEntriesByUser( twitterScreenName ), keywords );
-
-        fileRecorder( userName + "-Twitter" ).record( entries );
+        record( userName + "-Twitter", entries );
     }
 
     public static void runGooglePlusSearch( String keyWord ) {
-        final GooglePlusClient googlePlus = new GooglePlusClient();
+        final List<Entry> entries = new GooglePlusClient().getEntriesByKeyWord( keyWord );
 
-        fileRecorder( keyWord + "-GooglePlus" ).record( googlePlus.getEntriesByKeyWord( keyWord ) );
+        record( keyWord + "-GooglePlus", entries );
     }
 
     public static void runGooglePlusUserImporter( final String userName,
-                                                  final String googlePlusUserName,
-                                                  final List<String> keywords ) {
+                                                  final String googlePlusUserName ) {
+        final List<Entry> entries = filterByKeywords( new GooglePlusClient().getEntriesByUser( googlePlusUserName ) );
 
-        final GooglePlusClient googlePlus = new GooglePlusClient();
-        final List<Entry> entries = filterByKeywords( googlePlus.getEntriesByUser( googlePlusUserName ), keywords );
-
-        fileRecorder( userName + "-GooglePlus" ).record( entries );
+        record( userName + "-GooglePlus", entries );
     }
 
-    private static FileRecorder fileRecorder( final String userName ) {
-        return new FileRecorder( userName );
+    private static void record( final String fileName,
+                                final List<Entry> entries ) {
+
+
+        new EntryRecorder( fileName ).record( entries );
     }
 
     // kill this method
-    private static List<Entry> filterByKeywords( final List<Entry> entries,
-                                                 final List<String> keywords ) {
+    private static List<Entry> filterByKeywords( final List<Entry> entries ) {
         return entries
                 .stream()
                 .filter( entry -> keywords.stream().anyMatch( keyword -> entry.getTitle().contains( keyword ) ) )

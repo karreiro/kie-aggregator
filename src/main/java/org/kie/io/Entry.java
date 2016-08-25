@@ -16,12 +16,15 @@
 
 package org.kie.io;
 
+import java.io.Serializable;
+
 import com.google.api.client.util.DateTime;
 import com.google.api.services.plus.model.Activity;
 import com.sun.syndication.feed.synd.SyndEntry;
 import twitter4j.Status;
 
-public class Entry implements Comparable {
+public class Entry implements Comparable,
+                              Serializable {
 
     private final String title;
     private final String link;

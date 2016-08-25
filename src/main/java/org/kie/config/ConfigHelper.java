@@ -14,35 +14,30 @@
  * limitations under the License.
  */
 
-package org.kie.io;
+package org.kie.config;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.List;
+import java.io.FileReader;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-public class FileReader {
+public class ConfigHelper {
 
-    private final String fileName;
-
-    public FileReader( final String fileName ) {
-        this.fileName = fileName;
+    static JsonReader readFile( final String fileName ) {
+        try {
+            return new JsonReader( new FileReader( filePath( fileName ) ) );
+        } catch ( FileNotFoundException e ) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public List<Entry> getEntries() throws FileNotFoundException {
-        final JsonReader reader = readFile();
-        final Entry[] entries = gson().fromJson( reader, Entry[].class );
-
-        return Arrays.asList( entries );
-    }
-
-    private JsonReader readFile() throws FileNotFoundException {
-        return new JsonReader( new java.io.FileReader( fileName ) );
-    }
-
-    private Gson gson() {
+    static Gson gson() {
         return new Gson();
+    }
+
+    private static String filePath( String fileName ) {
+        return System.getProperty( "user.dir" ) + "/config/" + fileName;
     }
 }
