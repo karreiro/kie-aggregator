@@ -16,17 +16,20 @@
 
 package org.kie.io;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.Lists;
+
 public class EntryRecorder {
 
     private final String fileName;
+    private final EntryPagination pagination;
 
     public EntryRecorder( final String fileName ) {
+        this.pagination = new EntryPagination();
         this.fileName = fileName;
     }
 
@@ -52,30 +55,23 @@ public class EntryRecorder {
     }
 
     List<Entry> loadExistingEntries() {
-        try {
-            return fileReader().getEntries();
-        } catch ( FileNotFoundException e ) {
-            return new ArrayList<>();
-        }
+        return fileReader().getEntries();
     }
 
     void overrideExistingEntries( final List<Entry> entryList ) {
-        try {
-            fileRecorder().record( entryList );
-        } catch ( IOException e ) {
-            e.printStackTrace();
-        }
+        final List<Entry> entries = Lists.reverse( entryList );
+
+        pagination.paginate( entries, ( index, page ) -> {
+            try {
+                new EntryWriter( fileName + "-" + index ).record( page );
+            } catch ( IOException e ) {
+                e.printStackTrace();
+            }
+        } );
+
     }
 
     private EntryReader fileReader() {
-        return new EntryReader( filePath() );
-    }
-
-    private EntryWriter fileRecorder() {
-        return new EntryWriter( filePath() );
-    }
-
-    private String filePath() {
-        return System.getProperty( "user.dir" ) + "/static-content/" + fileName + ".json";
+        return new EntryReader( fileName );
     }
 }

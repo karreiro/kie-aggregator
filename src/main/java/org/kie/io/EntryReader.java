@@ -18,6 +18,7 @@ package org.kie.io;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,23 +27,40 @@ import com.google.gson.stream.JsonReader;
 
 public class EntryReader {
 
-    private final String filePath;
+    private final String fileName;
 
-    public EntryReader( final String filePath ) {
-        this.filePath = filePath;
+    public EntryReader( final String fileName ) {
+        this.fileName = fileName;
     }
 
-    public List<Entry> getEntries() throws FileNotFoundException {
-        final Entry[] entries = gson().fromJson( readFile(), Entry[].class );
+    public List<Entry> getEntries() {
+        int i = 0;
+        boolean hasFiles = true;
 
-        return Arrays.asList( entries );
+        List<Entry> entries = new ArrayList<>();
+
+        while ( hasFiles ) {
+            try {
+                entries.addAll( Arrays.asList( gson().fromJson( readFile( i ), Entry[].class ) ) );
+                i++;
+            } catch ( FileNotFoundException e ) {
+                hasFiles = false;
+            }
+        }
+
+        return entries;
     }
 
-    private JsonReader readFile() throws FileNotFoundException {
-        return new JsonReader( new FileReader( filePath ) );
+    private JsonReader readFile( final int n ) throws FileNotFoundException {
+        String fileName = filePath( n );
+        return new JsonReader( new FileReader( fileName ) );
     }
 
     private Gson gson() {
         return new Gson();
+    }
+
+    private String filePath( final int n ) {
+        return System.getProperty( "user.dir" ) + "/static-content/" + fileName + "-" + n + ".json";
     }
 }

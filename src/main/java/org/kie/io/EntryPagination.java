@@ -16,6 +16,28 @@
 
 package org.kie.io;
 
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+
 public class EntryPagination {
 
+    private static int PAGE_SIZE = 100;
+
+    public void paginate( final List<Entry> entries,
+                          final BiConsumer<Integer, List<Entry>> consumer ) {
+        int i = 0;
+        List<Entry> page;
+
+        do {
+            int index = i * PAGE_SIZE;
+            page = entries.stream().skip( index ).limit( PAGE_SIZE ).collect( Collectors.toList() );
+
+            if ( !page.isEmpty() ) {
+                consumer.accept( i, page );
+                i++;
+            }
+
+        } while ( !page.isEmpty() );
+    }
 }

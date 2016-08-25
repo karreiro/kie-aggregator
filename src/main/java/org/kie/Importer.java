@@ -66,7 +66,6 @@ public class Importer {
     private static void record( final String fileName,
                                 final List<Entry> entries ) {
 
-
         new EntryRecorder( fileName ).record( entries );
     }
 
