@@ -16,17 +16,33 @@
 
 package org.kie.io;
 
+import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+
 public class FileReader {
-    private final String filePath;
+
+    private final String fileName;
 
     public FileReader( final String fileName ) {
-        this.filePath = fileName;
+        this.fileName = fileName;
     }
 
-    public List<Entry> getEntries() {
-        // TODO
-        return null;
+    public List<Entry> getEntries() throws FileNotFoundException {
+        final JsonReader reader = readFile();
+        final Entry[] entries = gson().fromJson( reader, Entry[].class );
+
+        return Arrays.asList( entries );
+    }
+
+    private JsonReader readFile() throws FileNotFoundException {
+        return new JsonReader( new java.io.FileReader( fileName ) );
+    }
+
+    private Gson gson() {
+        return new Gson();
     }
 }

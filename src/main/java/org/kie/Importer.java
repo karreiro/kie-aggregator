@@ -73,8 +73,8 @@ public class Importer {
     }
 
     // kill this method
-    public static List<Entry> filterByKeywords( final List<Entry> entries,
-                                                final List<String> keywords ) {
+    private static List<Entry> filterByKeywords( final List<Entry> entries,
+                                                 final List<String> keywords ) {
         return entries
                 .stream()
                 .filter( entry -> keywords.stream().anyMatch( keyword -> entry.getTitle().contains( keyword ) ) )

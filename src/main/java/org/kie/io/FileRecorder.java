@@ -16,9 +16,14 @@
 
 package org.kie.io;
 
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 
@@ -30,15 +35,33 @@ public class FileRecorder {
         this.fileName = fileName;
     }
 
-    public void record( List<Entry> entries ) {
-        final String fileContent = toJson( entries );
+    public void record( List<Entry> newEntries ) {
+        final FileReader fileReader = new FileReader( filePath() );
+
+        List<Entry> entries = new ArrayList<>();
+
+        try {
+            entries = fileReader.getEntries();
+        } catch ( FileNotFoundException e ) {
+
+        }
+
+        newEntries.addAll( entries );
+
+        final List<Entry> entryList = newEntries
+                .stream()
+                .distinct( )
+                .sorted( ( e1, e2 ) -> e1.compareTo( e1 ) )
+                .collect( Collectors.toList() );
+
+        final String fileContent = toJson( entryList );
 
         writeFile( fileContent );
     }
 
     private void writeFile( final String fileContent ) {
         try {
-            final FileWriter file = new FileWriter( filePath() + fileName + ".json" );
+            final FileWriter file = new FileWriter( filePath() );
 
             file.write( fileContent );
             file.flush();
@@ -53,6 +76,6 @@ public class FileRecorder {
     }
 
     private String filePath() {
-        return System.getProperty("user.dir") + "/static-content/";
+        return System.getProperty( "user.dir" ) + "/static-content/" + fileName + ".json";
     }
 }

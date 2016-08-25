@@ -21,7 +21,7 @@ import com.google.api.services.plus.model.Activity;
 import com.sun.syndication.feed.synd.SyndEntry;
 import twitter4j.Status;
 
-public class Entry {
+public class Entry implements Comparable {
 
     private final String title;
     private final String link;
@@ -83,5 +83,35 @@ public class Entry {
 
     private String removeTags( String s ) {
         return s.replaceAll( "\\<.*?>", "" ).trim();
+    }
+
+    @Override
+    public boolean equals( final Object o ) {
+        if ( this == o ) {
+            return true;
+        }
+        if ( o == null || getClass() != o.getClass() ) {
+            return false;
+        }
+
+        final Entry entry = (Entry) o;
+
+        return title != null ? title.equals( entry.title ) : entry.title == null;
+
+    }
+
+    @Override
+    public int compareTo( final Object o ) {
+        final Entry entry = (Entry) o;
+
+        final Long v1 = entry.getCreatedAt().getValue();
+        final Long v2 = getCreatedAt().getValue();
+
+        return v1.compareTo( v2 );
+    }
+
+    @Override
+    public int hashCode() {
+        return title != null ? title.hashCode() : super.hashCode();
     }
 }

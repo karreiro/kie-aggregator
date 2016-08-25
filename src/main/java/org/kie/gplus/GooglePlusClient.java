@@ -30,7 +30,6 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.PlusScopes;
-import com.google.api.services.plus.model.Activity;
 import org.kie.io.Entry;
 
 public class GooglePlusClient {
@@ -90,6 +89,9 @@ public class GooglePlusClient {
         final HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         final JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
-        return new Plus.Builder( httpTransport, jsonFactory, credential( httpTransport, jsonFactory ) ).build();
+        return new Plus
+                .Builder( httpTransport, jsonFactory, credential( httpTransport, jsonFactory ) )
+                .setApplicationName( "kie-aggregator" )
+                .build();
     }
 }

@@ -19,6 +19,7 @@ package org.kie.io;
 import java.util.Date;
 
 import com.google.api.client.util.DateTime;
+import com.google.api.services.plus.model.Activity;
 import com.sun.syndication.feed.synd.SyndEntry;
 import org.junit.Test;
 import twitter4j.Status;
@@ -64,5 +65,13 @@ public class EntryTest {
         assertEquals( "https://twitter.com/g_carreiro/status/1", entry.getLink() );
         assertEquals( new DateTime( date ), entry.getCreatedAt() );
         assertEquals( EntryType.TWITTER, entry.getType() );
+    }
+
+    @Test
+    public void testEquals() {
+        final Entry e1 = new Entry( new Activity().setTitle( "Test" ).setUrl( "http://redhat.com/en" ) );
+        final Entry e2 = new Entry( new Activity().setTitle( "Test" ).setUrl( "http://redhat.com/br" ) );
+
+        assertEquals( e1, e2 );
     }
 }
