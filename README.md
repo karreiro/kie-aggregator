@@ -24,7 +24,7 @@ It supports:
 - Select the Key type as P12;
 - Click "Create";
 - The P12 file will be downloaded;
-- Replace the "googleplus.p12" file by this one.
+- Replace the "googleplus.p12" file by this one;
 - Update the "googleplus.properties" file.
 
 #### 2. Generate a Twitter credentials
@@ -33,7 +33,7 @@ It supports:
 - Insert the "Name", the "Description" and the "Website";
 - Check the checkbox "Yes, I have read and agree to the Twitter Developer Agreement";
 - Click "Create your Twitter application";
-- Click "Keys and Access Tokens"
+- Click "Keys and Access Tokens";
 - Update the "twitter4j.properties" file.
 
 #### 3. Build
