@@ -14,8 +14,20 @@
  * limitations under the License.
  */
 
-package org.kie.io;
+package org.kie.config;
 
-public enum EntryType {
-    RSS, GooglePlus, Twitter
+import java.util.List;
+
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class KeyWordsTest {
+
+    @Test
+    public void testAll() throws Exception {
+        final List<String> keywords = KeyWords.all();
+
+        assertEquals( 4, keywords.size() );
+    }
 }

@@ -26,16 +26,16 @@ public class EntryPagination {
 
     public void paginate( final List<Entry> entries,
                           final BiConsumer<Integer, List<Entry>> consumer ) {
-        int i = 0;
+        int pageNumber = 0;
         List<Entry> page;
 
         do {
-            int index = i * PAGE_SIZE;
+            int index = pageNumber * PAGE_SIZE;
             page = entries.stream().skip( index ).limit( PAGE_SIZE ).collect( Collectors.toList() );
 
             if ( !page.isEmpty() ) {
-                consumer.accept( i, page );
-                i++;
+                consumer.accept( pageNumber, page );
+                pageNumber++;
             }
 
         } while ( !page.isEmpty() );

@@ -42,7 +42,7 @@ public class Entry implements Comparable,
         this.title = "@" + status.getUser().getScreenName() + ": " + status.getText();
         this.link = "https://twitter.com/" + status.getUser().getScreenName() + "/status/" + status.getId();
         this.createdAt = new DateTime( status.getCreatedAt() );
-        this.type = EntryType.TWITTER;
+        this.type = EntryType.Twitter;
     }
 
     public Entry( final Activity activity ) {

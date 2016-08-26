@@ -64,7 +64,7 @@ public class EntryTest {
         assertEquals( "@g_carreiro: Test", entry.getTitle() );
         assertEquals( "https://twitter.com/g_carreiro/status/1", entry.getLink() );
         assertEquals( new DateTime( date ), entry.getCreatedAt() );
-        assertEquals( EntryType.TWITTER, entry.getType() );
+        assertEquals( EntryType.Twitter, entry.getType() );
     }
 
     @Test

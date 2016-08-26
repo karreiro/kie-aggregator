@@ -55,7 +55,7 @@ public class EntryRecorder {
     }
 
     List<Entry> loadExistingEntries() {
-        return fileReader().getEntries();
+        return new EntryReader( fileName ).getEntries();
     }
 
     void overrideExistingEntries( final List<Entry> entryList ) {
@@ -71,7 +71,4 @@ public class EntryRecorder {
 
     }
 
-    private EntryReader fileReader() {
-        return new EntryReader( fileName );
-    }
 }

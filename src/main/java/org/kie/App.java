@@ -16,9 +16,7 @@
 
 package org.kie;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.kie.config.KeyWords;
 import org.kie.config.People;

@@ -34,15 +34,15 @@ public class EntryReader {
     }
 
     public List<Entry> getEntries() {
-        int i = 0;
+        int pageNumber = 0;
         boolean hasFiles = true;
 
         List<Entry> entries = new ArrayList<>();
 
         while ( hasFiles ) {
             try {
-                entries.addAll( Arrays.asList( gson().fromJson( readFile( i ), Entry[].class ) ) );
-                i++;
+                entries.addAll( Arrays.asList( gson().fromJson( readFile( pageNumber ), Entry[].class ) ) );
+                pageNumber++;
             } catch ( FileNotFoundException e ) {
                 hasFiles = false;
             }

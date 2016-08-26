@@ -69,7 +69,7 @@ public class Importer {
         new EntryRecorder( fileName ).record( entries );
     }
 
-    // kill this method
+    // TODO: remove this method
     private static List<Entry> filterByKeywords( final List<Entry> entries ) {
         return entries
                 .stream()

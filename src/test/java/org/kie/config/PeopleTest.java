@@ -14,8 +14,26 @@
  * limitations under the License.
  */
 
-package org.kie.io;
+package org.kie.config;
 
-public enum EntryType {
-    RSS, GooglePlus, Twitter
+import java.util.List;
+
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class PeopleTest {
+
+    @Test
+    public void testAll() throws Exception {
+        final List<Person> people = People.all();
+        final Person person = people.get( 0 );
+
+        assertEquals( 4, people.size() );
+
+        assertEquals( "mdproctor", person.getUserId() );
+        assertEquals( "markproctor", person.getTwitter() );
+        assertEquals( "+MarkProctor", person.getGooglePlus() );
+        assertEquals( "https://www.redhat.com/en/rss/press-releases", person.getRss() );
+    }
 }
