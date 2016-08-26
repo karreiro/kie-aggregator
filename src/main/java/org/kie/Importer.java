@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.kie.config.KeyWords;
+import org.kie.config.People;
+import org.kie.config.Person;
 import org.kie.gplus.GooglePlusClient;
 import org.kie.io.Entry;
 import org.kie.io.EntryRecorder;
@@ -29,38 +31,27 @@ import org.kie.twitter.TwitterClient;
 public class Importer {
 
     private static List<String> keywords = KeyWords.all();
+    private static List<Person> all = People.all();
 
-    public static void runRssImporter( final String userName,
-                                       final String feedUrl ) {
-        final List<Entry> entries = filterByKeywords( new RSSClient( feedUrl ).getEntries() );
+    public static void run() {
+        all.forEach( person -> {
 
-        record( userName + "-RSS", entries );
-    }
+            final List<Entry> twitterEntries = new TwitterClient().getEntriesByUser( person.getTwitter() );
+            final List<Entry> googlePlusEntries = new GooglePlusClient().getEntriesByUser( person.getGooglePlus() );
+            final List<Entry> rssEntries = new RSSClient( person.getRss() ).getEntries();
 
-    public static void runTwitterHashTagImporter( final String hashTag ) {
-        final List<Entry> entries = new TwitterClient().getEntriesByHashTag( hashTag );
+            record( person.getUserId() + "-Twitter", filter( twitterEntries ) );
+            record( person.getUserId() + "-GooglePlus", filter( googlePlusEntries ) );
+            record( person.getUserId() + "-RSS", filter( rssEntries ) );
+        } );
 
-        record( hashTag + "-Twitter", entries );
-    }
+        keywords.forEach( ( hashTag ) -> {
+            record( hashTag + "-Twitter", new TwitterClient().getEntriesByHashTag( hashTag ) );
+        } );
 
-    public static void runTwitterUserImporter( final String userName,
-                                               final String twitterScreenName ) {
-        final List<Entry> entries = filterByKeywords( new TwitterClient().getEntriesByUser( twitterScreenName ) );
-
-        record( userName + "-Twitter", entries );
-    }
-
-    public static void runGooglePlusSearch( String keyWord ) {
-        final List<Entry> entries = new GooglePlusClient().getEntriesByKeyWord( keyWord );
-
-        record( keyWord + "-GooglePlus", entries );
-    }
-
-    public static void runGooglePlusUserImporter( final String userName,
-                                                  final String googlePlusUserName ) {
-        final List<Entry> entries = filterByKeywords( new GooglePlusClient().getEntriesByUser( googlePlusUserName ) );
-
-        record( userName + "-GooglePlus", entries );
+        keywords.forEach( ( keyWord ) -> {
+            record( keyWord + "-GooglePlus", new GooglePlusClient().getEntriesByKeyWord( keyWord ) );
+        } );
     }
 
     private static void record( final String fileName,
@@ -69,8 +60,8 @@ public class Importer {
         new EntryRecorder( fileName ).record( entries );
     }
 
-    // TODO: remove this method
-    private static List<Entry> filterByKeywords( final List<Entry> entries ) {
+    // TODO: Remove this method
+    private static List<Entry> filter( final List<Entry> entries ) {
         return entries
                 .stream()
                 .filter( entry -> keywords.stream().anyMatch( keyword -> entry.getTitle().contains( keyword ) ) )

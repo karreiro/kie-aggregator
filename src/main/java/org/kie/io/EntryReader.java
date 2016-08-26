@@ -61,6 +61,6 @@ public class EntryReader {
     }
 
     private String filePath( final int n ) {
-        return System.getProperty( "user.dir" ) + "/static-content/" + fileName + "-" + n + ".json";
+        return System.getProperty( "user.dir" ) + "/static-content/" + fileName + "/" + n + ".json";
     }
 }

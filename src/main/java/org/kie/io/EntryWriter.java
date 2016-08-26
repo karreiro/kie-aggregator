@@ -16,6 +16,7 @@
 
 package org.kie.io;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -30,16 +31,16 @@ public class EntryWriter {
         this.fileName = fileName;
     }
 
-    public void record( List<Entry> entries ) throws IOException {
-        List<Entry> fullEntries = entries;
+    public void record( final int index,
+                        final List<Entry> entries ) throws IOException {
+        final String content = toJson( entries );
 
-        final String content = toJson( fullEntries );
-
-        writeFile( content );
+        writeFile( filePath( index ), content );
     }
 
-    private void writeFile( final String fileContent ) throws IOException {
-        final FileWriter file = new FileWriter( filePath() );
+    private void writeFile( final String fileName,
+                            final String fileContent ) throws IOException {
+        final FileWriter file = new FileWriter( fileName );
 
         file.write( fileContent );
         file.flush();
@@ -50,7 +51,16 @@ public class EntryWriter {
         return new Gson().toJson( entries );
     }
 
-    private String filePath() {
-        return System.getProperty( "user.dir" ) + "/static-content/" + fileName + ".json";
+    private String filePath( final int pageNumber ) {
+        return folderPath() + "/" + pageNumber + ".json";
+    }
+
+    private String folderPath() {
+        final String folder = System.getProperty( "user.dir" ) + "/static-content/" + fileName;
+        final File file = new File( folder );
+
+        file.mkdir();
+
+        return file.getPath();
     }
 }

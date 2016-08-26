@@ -63,12 +63,10 @@ public class EntryRecorder {
 
         pagination.paginate( entries, ( index, page ) -> {
             try {
-                new EntryWriter( fileName + "-" + index ).record( page );
+                new EntryWriter( fileName ).record( index, page );
             } catch ( IOException e ) {
                 e.printStackTrace();
             }
         } );
-
     }
-
 }

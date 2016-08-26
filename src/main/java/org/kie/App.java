@@ -16,23 +16,9 @@
 
 package org.kie;
 
-import java.util.List;
-
-import org.kie.config.KeyWords;
-import org.kie.config.People;
-
 public class App {
 
     public static void main( String[] args ) {
-        final List<String> keywords = KeyWords.all();
-
-        People.all().forEach( person -> {
-            Importer.runTwitterUserImporter( person.getUserId(), person.getTwitter() );
-            Importer.runGooglePlusUserImporter( person.getUserId(), person.getGooglePlus() );
-            Importer.runRssImporter( person.getUserId(), person.getRss() );
-        } );
-
-        keywords.forEach( Importer::runTwitterHashTagImporter );
-        keywords.forEach( Importer::runGooglePlusSearch );
+        Importer.run();
     }
 }
