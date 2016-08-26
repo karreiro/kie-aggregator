@@ -73,7 +73,7 @@ public class GooglePlusClient {
     private GoogleCredential credential( final HttpTransport httpTransport,
                                          final JsonFactory jsonFactory ) throws GeneralSecurityException, IOException {
         return new GoogleCredential.Builder()
-                .setServiceAccountId( "kie-aggregator@appspot.gserviceaccount.com" )
+                .setServiceAccountId( GooglePlusProperties.APPLICATION_SERVICE_ACCOUNT_ID )
                 .setTransport( httpTransport )
                 .setJsonFactory( jsonFactory )
                 .setServiceAccountPrivateKeyFromP12File( configFile() )
@@ -82,7 +82,7 @@ public class GooglePlusClient {
     }
 
     private File configFile() {
-        return new File( "googleplus.p12" );
+        return new File( "googleplus.key.p12" );
     }
 
     Plus gPlus() throws GeneralSecurityException, IOException {
@@ -91,7 +91,7 @@ public class GooglePlusClient {
 
         return new Plus
                 .Builder( httpTransport, jsonFactory, credential( httpTransport, jsonFactory ) )
-                .setApplicationName( "kie-aggregator" )
+                .setApplicationName( GooglePlusProperties.APPLICATION_NAME )
                 .build();
     }
 }

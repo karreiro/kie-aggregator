@@ -25,6 +25,7 @@ It supports:
 - Click "Create";
 - The P12 file will be downloaded;
 - Replace the "googleplus.p12" file by this one.
+- Update the "googleplus.properties" file.
 
 #### 2. Generate a Twitter credentials
 - Open the [list of apps](https://apps.twitter.com/) in the Twitter Application Management;

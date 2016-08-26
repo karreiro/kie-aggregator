@@ -31,10 +31,10 @@ import org.kie.twitter.TwitterClient;
 public class Importer {
 
     private static List<String> keywords = KeyWords.all();
-    private static List<Person> all = People.all();
+    private static List<Person> people = People.all();
 
     public static void run() {
-        all.forEach( person -> {
+        people.forEach( person -> {
 
             final List<Entry> twitterEntries = new TwitterClient().getEntriesByUser( person.getTwitter() );
             final List<Entry> googlePlusEntries = new GooglePlusClient().getEntriesByUser( person.getGooglePlus() );
