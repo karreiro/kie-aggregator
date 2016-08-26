@@ -16,6 +16,7 @@
 
 package org.kie.io;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -35,25 +36,29 @@ public class EntryReader {
 
     public List<Entry> getEntries() {
         int pageNumber = 0;
-        boolean hasFiles = true;
 
         List<Entry> entries = new ArrayList<>();
 
-        while ( hasFiles ) {
-            try {
-                entries.addAll( Arrays.asList( gson().fromJson( readFile( pageNumber ), Entry[].class ) ) );
-                pageNumber++;
-            } catch ( FileNotFoundException e ) {
-                hasFiles = false;
-            }
+        while ( exists( filePath( pageNumber ) ) ) {
+            entries.addAll( Arrays.asList( gson().fromJson( readFile( filePath( pageNumber ) ), Entry[].class ) ) );
+            pageNumber += 1;
         }
 
         return entries;
     }
 
-    private JsonReader readFile( final int n ) throws FileNotFoundException {
-        String fileName = filePath( n );
-        return new JsonReader( new FileReader( fileName ) );
+    private boolean exists( final String filePath ) {
+        return new File( filePath ).exists();
+    }
+
+    private JsonReader readFile( final String filePath ) {
+        try {
+            return new JsonReader( new FileReader( filePath ) );
+        } catch ( FileNotFoundException e ) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private Gson gson() {
