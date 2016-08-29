@@ -17,5 +17,5 @@
 package org.kie.io;
 
 public enum EntryType {
-    RSS, GooglePlus, Twitter
+    RSS, GooglePlus, YouTube, Vimeo, Twitter
 }

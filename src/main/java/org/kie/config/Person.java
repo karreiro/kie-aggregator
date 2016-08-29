@@ -22,6 +22,8 @@ public class Person {
     private String googlePlus;
     private String twitter;
     private String rss;
+    private String vimeo;
+    private String youTube;
 
     public String getUserId() {
         return userId;
@@ -37,5 +39,13 @@ public class Person {
 
     public String getRss() {
         return rss;
+    }
+
+    public String getVimeo() {
+        return vimeo;
+    }
+
+    public String getYouTube() {
+        return youTube;
     }
 }

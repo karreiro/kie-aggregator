@@ -94,5 +94,16 @@
       <version>v1-rev431-1.22.0</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.google.apis</groupId>
+      <artifactId>google-api-services-youtube</artifactId>
+      <version>v3-rev178-1.22.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.clickntap</groupId>
+      <artifactId>vimeo</artifactId>
+      <version>1.10</version>
+    </dependency>
   </dependencies>
 </project>

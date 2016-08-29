@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.gplus;
+package org.kie.google;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;

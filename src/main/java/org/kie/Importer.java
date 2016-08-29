@@ -22,11 +22,13 @@ import java.util.stream.Collectors;
 import org.kie.config.KeyWords;
 import org.kie.config.People;
 import org.kie.config.Person;
-import org.kie.gplus.GooglePlusClient;
+import org.kie.google.GooglePlusClient;
+import org.kie.google.YouTubeClient;
 import org.kie.io.Entry;
 import org.kie.io.EntryRecorder;
 import org.kie.rss.RSSClient;
 import org.kie.twitter.TwitterClient;
+import org.kie.vimeo.VimeoClient;
 
 public class Importer {
 
@@ -39,10 +41,14 @@ public class Importer {
             final List<Entry> twitterEntries = new TwitterClient().getEntriesByUser( person.getTwitter() );
             final List<Entry> googlePlusEntries = new GooglePlusClient().getEntriesByUser( person.getGooglePlus() );
             final List<Entry> rssEntries = new RSSClient( person.getRss() ).getEntries();
+            final List<Entry> vimeoEntries = new VimeoClient().getEntriesByUser( person.getVimeo() );
+            final List<Entry> youTubeEntries = new YouTubeClient().getEntriesByUser( person.getYouTube() );
 
             record( person.getUserId() + "-Twitter", filter( twitterEntries ) );
             record( person.getUserId() + "-GooglePlus", filter( googlePlusEntries ) );
             record( person.getUserId() + "-RSS", filter( rssEntries ) );
+            record( person.getUserId() + "-Vimeo", filter( vimeoEntries ) );
+            record( person.getUserId() + "-YouTube", filter( youTubeEntries ) );
         } );
 
         keywords.forEach( ( hashTag ) -> {
@@ -51,6 +57,14 @@ public class Importer {
 
         keywords.forEach( ( keyWord ) -> {
             record( keyWord + "-GooglePlus", new GooglePlusClient().getEntriesByKeyWord( keyWord ) );
+        } );
+
+        keywords.forEach( ( keyWord ) -> {
+            record( keyWord + "-YouTube", new YouTubeClient().getEntriesByKeyWord( keyWord ) );
+        } );
+
+        keywords.forEach( ( keyWord ) -> {
+            record( keyWord + "-Vimeo", new VimeoClient().getEntriesByKeyWord( keyWord ) );
         } );
     }
 

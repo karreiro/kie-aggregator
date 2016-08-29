@@ -19,8 +19,9 @@ package org.kie.io;
 import java.io.Serializable;
 
 import com.google.api.client.util.DateTime;
-import com.google.api.services.plus.model.Activity;
+import com.google.api.services.youtube.model.SearchResult;
 import com.sun.syndication.feed.synd.SyndEntry;
+import org.json.JSONObject;
 import twitter4j.Status;
 
 public class Entry implements Comparable,
@@ -45,11 +46,25 @@ public class Entry implements Comparable,
         this.type = EntryType.Twitter;
     }
 
-    public Entry( final Activity activity ) {
+    public Entry( final com.google.api.services.plus.model.Activity activity ) {
         this.title = getTitle( activity );
         this.link = activity.getUrl();
         this.createdAt = activity.getPublished();
         this.type = EntryType.GooglePlus;
+    }
+
+    public Entry( final SearchResult searchResult ) {
+        this.title = searchResult.getSnippet().getTitle();
+        this.link = "https://www.youtube.com/watch?v=" + searchResult.getId().getVideoId();
+        this.createdAt = searchResult.getSnippet().getPublishedAt();
+        this.type = EntryType.YouTube;
+    }
+
+    public Entry( final JSONObject jsonObject ) {
+        this.title = jsonObject.getString( "name" );
+        this.link = jsonObject.getString( "link" );
+        this.createdAt = DateTime.parseRfc3339( jsonObject.getString( "release_time" ) );
+        this.type = EntryType.Vimeo;
     }
 
     public String getTitle() {
@@ -68,7 +83,7 @@ public class Entry implements Comparable,
         return createdAt;
     }
 
-    private String getTitle( Activity activity ) {
+    private String getTitle( com.google.api.services.plus.model.Activity activity ) {
         if ( activity.getTitle() != null && !activity.getTitle().isEmpty() ) {
             return removeTags( activity.getTitle() );
         }

@@ -14,31 +14,29 @@
  * limitations under the License.
  */
 
-package org.kie.gplus;
+package org.kie.google;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.plus.Plus;
-import com.google.api.services.plus.PlusScopes;
+import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.model.Channel;
 import org.kie.io.Entry;
 
-public class GooglePlusClient {
+public class YouTubeClient extends BaseClient {
 
     public List<Entry> getEntriesByKeyWord( final String keyWord ) {
         try {
-            return gPlus()
-                    .activities()
-                    .search( keyWord )
+            return youTubeSearch()
+                    .setQ( keyWord )
+                    .setOrder( "relevance" )
                     .execute()
                     .getItems()
                     .stream()
@@ -49,49 +47,53 @@ public class GooglePlusClient {
             e.printStackTrace();
         }
 
-        return null;
+        return new ArrayList<>();
     }
 
     public List<Entry> getEntriesByUser( final String userName ) {
         try {
-            return gPlus()
-                    .activities()
-                    .list( userName, "public" )
+            return youTubeSearch()
+                    .setChannelId( channeId( userName ) )
+                    .setOrder( "date" )
                     .execute()
                     .getItems()
                     .stream()
                     .map( Entry::new )
                     .collect( Collectors.toList() );
 
-        } catch ( GeneralSecurityException | IOException e ) {
+        } catch ( IndexOutOfBoundsException | GeneralSecurityException | IOException e ) {
             e.printStackTrace();
         }
 
-        return null;
+        return new ArrayList<>();
     }
 
-    private GoogleCredential credential( final HttpTransport httpTransport,
-                                         final JsonFactory jsonFactory ) throws GeneralSecurityException, IOException {
-        return new GoogleCredential.Builder()
-                .setServiceAccountId( GooglePlusProperties.APPLICATION_SERVICE_ACCOUNT_ID )
-                .setTransport( httpTransport )
-                .setJsonFactory( jsonFactory )
-                .setServiceAccountPrivateKeyFromP12File( configFile() )
-                .setServiceAccountScopes( Collections.singletonList( PlusScopes.PLUS_ME ) )
-                .build();
-    }
-
-    private File configFile() {
-        return new File( "googleplus.key.p12" );
-    }
-
-    Plus gPlus() throws GeneralSecurityException, IOException {
+    YouTube youTube() throws GeneralSecurityException, IOException {
         final HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         final JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
-        return new Plus
+        return new YouTube
                 .Builder( httpTransport, jsonFactory, credential( httpTransport, jsonFactory ) )
                 .setApplicationName( GooglePlusProperties.APPLICATION_NAME )
                 .build();
     }
+
+    private YouTube.Search.List youTubeSearch() throws IOException, GeneralSecurityException {
+        return youTube()
+                .search()
+                .list( "id,snippet" )
+                .setMaxResults( 50L );
+    }
+
+    private String channeId( final String userName ) throws IOException, GeneralSecurityException {
+        final List<Channel> channels = youTube()
+                .channels()
+                .list( "snippet" )
+                .setForUsername( userName )
+                .execute()
+                .getItems();
+
+        return channels.get( 0 ).getId();
+    }
+
 }

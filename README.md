@@ -7,7 +7,7 @@ It supports:
 - [x] RSS posts
 - [x] Google Plus posts
 - [ ] YouTube videos
-- [ ] Vimeo videos
+- [x] Vimeo videos
 
 ## Pre-requisites
 - Java 8
@@ -27,6 +27,14 @@ It supports:
 - Click "Create";
 - The P12 file will be downloaded;
 - Replace the "googleplus.p12" file by this one;
+- Click "Library";
+- Click "YouTube Data API";
+- Click "Enable";
+- Click "Library";
+- Click "Google+ API";
+- Click "Enable";
+- Open [Service Account Manager](https://console.cloud.google.com/iam-admin/serviceaccounts) to get the Service account ID;
+- Open [Settings](https://console.cloud.google.com/iam-admin/settings) to get the Project ID;
 - Update the "googleplus.properties" file.
 
 #### 2. Generate a Twitter credentials

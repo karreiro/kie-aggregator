@@ -19,6 +19,7 @@ package org.kie.rss;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class RSSClient {
         } catch ( FeedException | IOException e ) {
             e.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 
     protected List<SyndEntry> getFeedEntries() throws FeedException, IOException {

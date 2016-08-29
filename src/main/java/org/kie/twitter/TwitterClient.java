@@ -16,14 +16,13 @@
 
 package org.kie.twitter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.kie.io.Entry;
 import twitter4j.Paging;
 import twitter4j.Query;
-import twitter4j.QueryResult;
-import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -46,7 +45,7 @@ public class TwitterClient {
             e.printStackTrace();
         }
 
-        return null;
+        return new ArrayList<>();
     }
 
     public List<Entry> getEntriesByUser( final String screenName ) {
@@ -62,7 +61,7 @@ public class TwitterClient {
             e.printStackTrace();
         }
 
-        return null;
+        return new ArrayList<>();
     }
 
     Twitter twitter() {

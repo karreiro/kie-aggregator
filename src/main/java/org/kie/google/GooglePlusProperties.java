@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.gplus;
+package org.kie.google;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -22,8 +22,8 @@ import java.util.Properties;
 
 public class GooglePlusProperties {
 
-    static String APPLICATION_NAME = properties().getProperty( "application.name" );
-    static String APPLICATION_SERVICE_ACCOUNT_ID = properties().getProperty( "application.serviceAccountId" );
+    public static String APPLICATION_NAME = properties().getProperty( "application.name" );
+    public static String APPLICATION_SERVICE_ACCOUNT_ID = properties().getProperty( "application.serviceAccountId" );
 
     private static Properties properties() {
         final Properties prop = new Properties();

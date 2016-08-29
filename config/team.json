@@ -3,29 +3,32 @@
 		"userId" : "mdproctor",
 		"googlePlus" : "+MarkProctor",
 		"twitter" : "markproctor",
-		"rss" : "https://www.redhat.com/en/rss/press-releases"
-		
+		"rss" : "https://www.redhat.com/en/rss/press-releases",
+		"youTube" : "UCAyO0BUcxImficL4DEPjlhA",
+		"vimeo" : "lawebdecanada"
 	},
 	{
 		"userId" : "paulovmr",
 		"googlePlus" : "+PauloMartins7",
 		"twitter" : "paulovmr",
-		"rss" : "https://www.redhat.com/en/rss/press-releases"
-		
+		"rss" : "https://www.redhat.com/en/rss/press-releases",
+		"youTube" : "UCAyO0BUcxImficL4DEPjlhA",
+		"vimeo" : "lawebdecanada"
 	},
 	{
 		"userId" : "ederign",
 		"googlePlus" : "106744300418201776033",
 		"twitter" : "ederign",
-		"rss" : "https://www.redhat.com/en/rss/press-releases"
-		
+		"rss" : "https://www.redhat.com/en/rss/press-releases",
+		"youTube" : "UCAyO0BUcxImficL4DEPjlhA",
+		"vimeo" : "lawebdecanada"
 	},
 	{
 		"userId" : "karreiro",
 		"googlePlus" : "107736479244951758517",
 		"twitter" : "g_carreiro",
-		"rss" : "https://www.redhat.com/en/rss/press-releases"
-		
+		"rss" : "https://www.redhat.com/en/rss/press-releases",
+		"youTube" : "UCAyO0BUcxImficL4DEPjlhA",
+		"vimeo" : "lawebdecanada"
 	}
 ]
-
